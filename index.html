@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Thời khóa biểu & Đồng hồ</title>
+  <style>
+    
+    *{
+      font-family:Arial, Helvetica, sans-serif;
+    }
+    body{
+      margin:0;
+      background:linear-gradient(135deg,#0084ff,#1e293b);
+      font-family:'Poppins',Arial,sans-serif;
+      color:#f1f5f9;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:20px;
+    }
+    /* ===== Đồng hồ ===== */
+    .clock-box{
+      background:linear-gradient(145deg,#1e293b,#0f172a);
+      padding:25px 40px;
+      border-radius:20px;
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,0.5);
+      margin-bottom:25px;
+      max-width:400px;
+    }
+    .clock-box h2{margin:0;color:#d0bae9;font-size:22px;letter-spacing:1px}
+    .date{margin-top:6px;color:#94a3b8;font-size:15px}
+    .time{margin-top:15px;font-size:50px;font-weight:800;color:#e0c3da;letter-spacing:2px}
+    /* ===== Stopwatch ===== */
+    .stopwatch{margin-top:20px}
+    .stopwatch-time{font-size:28px;font-weight:700;margin-bottom:12px}
+    .stopwatch button{
+      margin:0 6px;
+      padding:8px 16px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      transition:transform .2s,opacity .2s;
+    }
+    .stopwatch button:hover{transform:scale(1.05);opacity:0.9}
+    .start{background:#0fd658;color:#fff}
+    .stop{background:#ef4444;color:#fff}
+    .reset{background:#3b82f6;color:#fff}
+    /* ===== Thời khóa biểu ===== */
+.timetable {
+  display: flex;
+  justify-content: center; /* căn giữa ngang */
+  align-items: center;     /* căn giữa dọc nếu cần */
+  margin-top: 20px;
+}
+
+.timetable img {
+  width: 85%;
+  max-width: 1000px;  /* để giữ đúng khung, không vượt màn hình */
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+}
+    .overlay-text{
+      position:absolute;
+      top:15%;
+      left:50%;
+      transform:translateX(-50%);
+      width:85%;
+      text-align:center;
+      color:#fff;
+      font-weight:600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Đồng hồ + Stopwatch -->
+  <div class="clock-box">
+    <h2 id="weekday">—</h2>
+    <div class="date" id="date">—</div>
+    <div class="time" id="time">--:--:--</div>
+    <div class="stopwatch">
+      <div class="stopwatch-time" id="stopwatch">00:00:00</div>
+      <button class="start" onclick="startStopwatch()">Bắt đầu</button>
+      <button class="stop" onclick="stopStopwatch()">Dừng</button>
+      <button class="reset" onclick="resetStopwatch()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Thời khóa biểu -->
+  <div class="timetable">
+    <img src="Trống Bảng phấn Lịch biểu Giáo Án.png" alt="Thời khóa biểu">
+    <!-- Ví dụ chèn text overlay lên bảng -->
+    <!-- <div class="overlay-text">Thứ 2: Linh kiện ĐT</div> -->
+  </div>
+
+  <script>
+    // ===== Đồng hồ =====
+    function titleCaseVietnamese(s){
+      return s.split(/\s+/).map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+    }
+    function updateClock(){
+      const now = new Date();
+      const opts={timeZone:'Asia/Ho_Chi_Minh',weekday:'long',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
+      const parts=new Intl.DateTimeFormat('vi-VN',opts).formatToParts(now);
+      const map={};for(const p of parts) map[p.type]=p.value;
+      document.getElementById('weekday').textContent=titleCaseVietnamese(map.weekday);
+      document.getElementById('date').textContent=`Ngày ${map.day} tháng ${map.month} năm ${map.year}`;
+      document.getElementById('time').textContent=`${map.hour}:${map.minute}:${map.second}`;
+    }
+    setInterval(updateClock,1000);updateClock();
+
+    // ===== Stopwatch =====
+    let stopwatchInterval;let elapsed=0;let running=false;
+    function formatTime(ms){
+      const totalSec=Math.floor(ms/1000);
+      const h=String(Math.floor(totalSec/3600)).padStart(2,'0');
+      const m=String(Math.floor((totalSec%3600)/60)).padStart(2,'0');
+      const s=String(totalSec%60).padStart(2,'0');
+      return `${h}:${m}:${s}`;
+    }
+    function startStopwatch(){
+      if(running) return;running=true;
+      const start=Date.now()-elapsed;
+      stopwatchInterval=setInterval(()=>{
+        elapsed=Date.now()-start;
+        document.getElementById('stopwatch').textContent=formatTime(elapsed);
+      },1000);
+    }
+    function stopStopwatch(){running=false;clearInterval(stopwatchInterval);}
+    function resetStopwatch(){elapsed=0;document.getElementById('stopwatch').textContent='00:00:00';if(running){clearInterval(stopwatchInterval);running=false;}}
+  </script>
+</body>
+</html>
