@@ -122,7 +122,6 @@
     .vocab-btn:active{transform:scale(0.98)}
     .btn-start{background:#0fd658;color:#fff}
     .btn-check{background:#3b82f6;color:#fff}
-    .btn-next{background:#f59e0b;color:#fff}
     .btn-reset{background:#ef4444;color:#fff}
     
     .vocab-display{
@@ -212,6 +211,12 @@
       font-style:italic;
     }
     
+    .direction-hint{
+      color:#94a3b8;
+      font-size:14px;
+      margin-top:15px;
+    }
+    
     @media (max-width: 600px) {
       .vocab-box{padding:20px}
       .vocab-word{font-size:28px}
@@ -251,6 +256,7 @@
         </div>
       </div>
       <div class="instruction">💡 Nhập số lượng từ tiếng Anh và nghĩa tương ứng phải bằng nhau</div>
+      <div class="instruction">🔄 Hệ thống sẽ random hiển thị Tiếng Anh hoặc Tiếng Việt - bạn nhập đáp án tương ứng</div>
       <button class="vocab-btn btn-start" onclick="startTest()">Bắt đầu kiểm tra</button>
     </div>
 
@@ -258,22 +264,21 @@
     <div id="testPhase" class="hidden">
       <div class="vocab-display">
         <div class="vocab-word" id="currentWord">—</div>
-        <button class="pronunciation-btn" onclick="pronounceWord()" title="Phát âm từ này">
+        <button class="pronunciation-btn" id="pronounceBtn" onclick="pronounceWord()" title="Phát âm từ này">
           🔊 Nghe phát âm
         </button>
-        <div style="color:#94a3b8;font-size:14px;margin-top:15px">Nhập nghĩa Tiếng Việt:</div>
+        <div class="direction-hint" id="directionHint">Nhập đáp án:</div>
       </div>
       
       <div class="vocab-input-group">
-        <input type="text" id="answerInput" placeholder="Nhập nghĩa tiếng Việt..." 
-               onkeypress="if(event.key==='Enter')checkAnswer()"
+        <input type="text" id="answerInput" placeholder="Nhập đáp án và nhấn Enter..." 
+               onkeypress="handleKeyPress(event)"
                autocomplete="off">
       </div>
       
       <div id="resultMsg" class="vocab-result hidden"></div>
       
-      <button class="vocab-btn btn-check" id="checkBtn" onclick="checkAnswer()">Kiểm tra</button>
-      <button class="vocab-btn btn-next hidden" id="nextBtn" onclick="nextWord()">Từ tiếp theo</button>
+      <button class="vocab-btn btn-check" id="checkBtn" onclick="checkAnswer()">Kiểm tra (Enter)</button>
       <button class="vocab-btn btn-reset" onclick="resetTest()">Kết thúc & Làm lại</button>
       
       <div class="vocab-stats">
@@ -366,6 +371,8 @@
     let currentIndex = 0;
     let userAnswers = [];
     let stats = {done: 0, correct: 0, wrong: 0};
+    let currentQuestion = null;
+    let isProcessing = false;
 
     function startTest(){
       const englishInput = document.getElementById('vocabEnglish').value.trim();
@@ -389,17 +396,23 @@
         return;
       }
       
-      // Create vocab pairs
-      vocabList = englishWords.map((eng, i) => ({
-        english: eng,
-        vietnamese: vietnameseMeanings[i]
-      }));
+      // Create vocab pairs with random direction
+      vocabList = [];
+      for(let i = 0; i < englishWords.length; i++){
+        const showEnglish = Math.random() < 0.5;
+        vocabList.push({
+          english: englishWords[i],
+          vietnamese: vietnameseMeanings[i],
+          showEnglish: showEnglish
+        });
+      }
       
       // Shuffle vocabulary
       vocabList = vocabList.sort(() => Math.random() - 0.5);
       currentIndex = 0;
       userAnswers = new Array(vocabList.length).fill(null);
       stats = {done: 0, correct: 0, wrong: 0};
+      isProcessing = false;
       
       document.getElementById('setupPhase').classList.add('hidden');
       document.getElementById('testPhase').classList.remove('hidden');
@@ -417,34 +430,68 @@
         return;
       }
       
-      document.getElementById('currentWord').textContent = vocabList[currentIndex].english;
+      isProcessing = false;
+      currentQuestion = vocabList[currentIndex];
+      
+      // Display question based on direction
+      const wordDisplay = document.getElementById('currentWord');
+      const hintDisplay = document.getElementById('directionHint');
+      const pronounceBtn = document.getElementById('pronounceBtn');
+      
+      if(currentQuestion.showEnglish){
+        wordDisplay.textContent = currentQuestion.english;
+        hintDisplay.textContent = '📝 Nhập nghĩa Tiếng Việt:';
+        pronounceBtn.style.display = 'inline-block';
+      }else{
+        wordDisplay.textContent = currentQuestion.vietnamese;
+        hintDisplay.textContent = '📝 Nhập từ Tiếng Anh:';
+        pronounceBtn.style.display = 'none';
+      }
+      
       document.getElementById('answerInput').value = '';
+      document.getElementById('answerInput').disabled = false;
       document.getElementById('answerInput').focus();
       document.getElementById('resultMsg').classList.add('hidden');
       document.getElementById('checkBtn').classList.remove('hidden');
-      document.getElementById('nextBtn').classList.add('hidden');
       
-      // Auto-pronounce the word after a short delay
-      setTimeout(pronounceWord, 400);
+      // Auto-pronounce English words
+      if(currentQuestion.showEnglish){
+        setTimeout(pronounceWord, 400);
+      }
+    }
+
+    function handleKeyPress(event){
+      if(event.key === 'Enter'){
+        if(!isProcessing){
+          checkAnswer();
+        }
+      }
     }
 
     function checkAnswer(){
+      if(isProcessing) return;
+      
       const answer = document.getElementById('answerInput').value.trim();
       if(!answer){
         alert('Vui lòng nhập đáp án!');
         return;
       }
       
+      isProcessing = true;
+      document.getElementById('answerInput').disabled = true;
+      
       userAnswers[currentIndex] = answer;
-      const correctAnswer = vocabList[currentIndex].vietnamese;
+      
+      // Determine correct answer based on direction
+      const correctAnswer = currentQuestion.showEnglish ? currentQuestion.vietnamese : currentQuestion.english;
       
       // Advanced normalization and fuzzy matching
       const normalize = str => str.toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/đ/g, 'd')
-        .replace(/[^\w\s]/g, '') // Remove punctuation
-        .replace(/\s+/g, ' ')    // Normalize spaces
+        .replace(/[^\w\s]/g, '')
+        .replace(/\s+/g, ' ')
         .trim();
       
       const normalizedAnswer = normalize(answer);
@@ -459,7 +506,6 @@
         const answerWords = normalizedAnswer.split(' ');
         const correctWords = normalizedCorrect.split(' ');
         
-        // If lengths match and all words are present (different order)
         if(answerWords.length === correctWords.length){
           const allWordsPresent = correctWords.every(w => answerWords.includes(w));
           if(allWordsPresent){
@@ -469,7 +515,7 @@
         }
       }
       
-      // Check partial match (if correct answer has multiple meanings separated by /, or ,)
+      // Check partial match (multiple meanings)
       if(!isCorrect && (correctAnswer.includes('/') || correctAnswer.includes(','))){
         const alternatives = correctAnswer.split(/[\/,]/).map(alt => normalize(alt.trim()));
         if(alternatives.some(alt => alt === normalizedAnswer)){
@@ -478,7 +524,7 @@
         }
       }
       
-      // Levenshtein distance for typo tolerance (max 2 character difference)
+      // Levenshtein distance for typo tolerance
       if(!isCorrect && normalizedAnswer.length >= 3){
         const distance = levenshteinDistance(normalizedAnswer, normalizedCorrect);
         const threshold = Math.max(2, Math.floor(normalizedCorrect.length * 0.15));
@@ -509,8 +555,12 @@
       updateStats();
       
       document.getElementById('checkBtn').classList.add('hidden');
-      document.getElementById('nextBtn').classList.remove('hidden');
-      document.getElementById('nextBtn').focus();
+      
+      // Auto move to next word after showing result
+      setTimeout(() => {
+        currentIndex++;
+        showWord();
+      }, 1800);
     }
     
     // Levenshtein distance algorithm for fuzzy matching
@@ -528,26 +578,14 @@
             dp[i][j] = dp[i-1][j-1];
           }else{
             dp[i][j] = Math.min(
-              dp[i-1][j] + 1,    // deletion
-              dp[i][j-1] + 1,    // insertion
-              dp[i-1][j-1] + 1   // substitution
+              dp[i-1][j] + 1,
+              dp[i][j-1] + 1,
+              dp[i-1][j-1] + 1
             );
           }
         }
       }
       return dp[m][n];
-    }
-
-    function nextWord(){
-      currentIndex++;
-      if(currentIndex >= vocabList.length){
-        const score = stats.correct;
-        const total = vocabList.length;
-        const percentage = Math.round((score / total) * 100);
-        alert(`🎉 Hoàn thành tất cả ${total} từ!\n\nĐiểm số: ${score}/${total} (${percentage}%)\n✅ Đúng: ${stats.correct}\n❌ Sai: ${stats.wrong}`);
-        return;
-      }
-      showWord();
     }
 
     function resetTest(){
@@ -557,6 +595,7 @@
       currentIndex = 0;
       userAnswers = [];
       stats = {done: 0, correct: 0, wrong: 0};
+      isProcessing = false;
       updateStats();
     }
 
@@ -571,14 +610,14 @@
       const word = document.getElementById('currentWord').textContent;
       if(!word || word === '—') return;
       
-      // Check if browser supports speech synthesis
+      if(!currentQuestion || !currentQuestion.showEnglish) return;
+      
       if('speechSynthesis' in window){
-        // Cancel any ongoing speech
         window.speechSynthesis.cancel();
         
         const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US'; // English pronunciation
-        utterance.rate = 0.85; // Slightly slower for learning
+        utterance.lang = 'en-US';
+        utterance.rate = 0.85;
         utterance.pitch = 1;
         utterance.volume = 1;
         
