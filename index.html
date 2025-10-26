@@ -17,6 +17,7 @@
       flex-direction:column;
       align-items:center;
       padding:20px;
+      min-height:100vh;
     }
     
     /* ===== Đồng hồ ===== */
@@ -28,6 +29,7 @@
       box-shadow:0 10px 30px rgba(0,0,0,0.5);
       margin-bottom:25px;
       max-width:400px;
+      width:90%;
     }
     .clock-box h2{margin:0;color:#d0bae9;font-size:22px;letter-spacing:1px}
     .date{margin-top:6px;color:#94a3b8;font-size:15px}
@@ -35,7 +37,7 @@
     
     /* ===== Stopwatch ===== */
     .stopwatch{margin-top:20px}
-    .stopwatch-time{font-size:28px;font-weight:700;margin-bottom:12px}
+    .stopwatch-time{font-size:28px;font-weight:700;margin-bottom:12px;color:#f1f5f9}
     .stopwatch button{
       margin:0 6px;
       padding:8px 16px;
@@ -44,13 +46,13 @@
       cursor:pointer;
       font-weight:600;
       transition:transform .2s,opacity .2s;
+      font-size:14px;
     }
     .stopwatch button:hover{transform:scale(1.05);opacity:0.9}
+    .stopwatch button:active{transform:scale(0.98)}
     .start{background:#0fd658;color:#fff}
     .stop{background:#ef4444;color:#fff}
     .reset{background:#3b82f6;color:#fff}
-    
-    /* ===== Thời khóa biểu ===== */
     
     /* ===== Vocabulary Test ===== */
     .vocab-box{
@@ -62,9 +64,21 @@
       max-width:600px;
       width:90%;
     }
-    .vocab-box h3{margin:0 0 20px 0;color:#d0bae9;font-size:24px;text-align:center}
+    .vocab-box h3{
+      margin:0 0 20px 0;
+      color:#d0bae9;
+      font-size:24px;
+      text-align:center;
+      letter-spacing:0.5px;
+    }
     .vocab-input-group{margin-bottom:20px}
-    .vocab-input-group label{display:block;margin-bottom:8px;color:#94a3b8;font-size:14px}
+    .vocab-input-group label{
+      display:block;
+      margin-bottom:8px;
+      color:#94a3b8;
+      font-size:14px;
+      font-weight:600;
+    }
     .vocab-input-group textarea{
       width:100%;
       padding:12px;
@@ -76,6 +90,7 @@
       resize:vertical;
       min-height:120px;
       box-sizing:border-box;
+      transition:border-color .2s;
     }
     .vocab-input-group input{
       width:100%;
@@ -86,6 +101,7 @@
       color:#f1f5f9;
       font-size:16px;
       box-sizing:border-box;
+      transition:border-color .2s;
     }
     .vocab-input-group input:focus,.vocab-input-group textarea:focus{
       outline:none;
@@ -103,27 +119,69 @@
       margin-top:10px;
     }
     .vocab-btn:hover{transform:scale(1.02);opacity:0.9}
+    .vocab-btn:active{transform:scale(0.98)}
     .btn-start{background:#0fd658;color:#fff}
     .btn-check{background:#3b82f6;color:#fff}
     .btn-next{background:#f59e0b;color:#fff}
     .btn-reset{background:#ef4444;color:#fff}
+    
     .vocab-display{
       background:#0f172a;
-      padding:20px;
+      padding:25px;
       border-radius:10px;
       margin-bottom:15px;
       text-align:center;
+      border:2px solid #1e293b;
     }
-    .vocab-word{font-size:32px;font-weight:700;color:#0fd658;margin-bottom:10px}
+    .vocab-word{
+      font-size:36px;
+      font-weight:700;
+      color:#0fd658;
+      margin-bottom:15px;
+      letter-spacing:1px;
+    }
+    
+    /* ===== Pronunciation Button ===== */
+    .pronunciation-btn{
+      margin:10px 0;
+      padding:10px 20px;
+      border:2px solid #0fd658;
+      border-radius:10px;
+      background:transparent;
+      color:#0fd658;
+      cursor:pointer;
+      font-weight:600;
+      font-size:16px;
+      transition:all .2s;
+      display:inline-block;
+    }
+    .pronunciation-btn:hover{
+      background:#0fd658;
+      color:#fff;
+      transform:scale(1.05);
+    }
+    .pronunciation-btn:active{
+      transform:scale(0.95);
+    }
+    
     .vocab-result{
       margin-top:15px;
       padding:15px;
       border-radius:10px;
       font-weight:600;
       text-align:center;
+      font-size:16px;
     }
-    .correct{background:#0fd65820;color:#0fd658;border:2px solid #0fd658}
-    .incorrect{background:#ef444420;color:#ef4444;border:2px solid #ef4444}
+    .correct{
+      background:#0fd65820;
+      color:#0fd658;
+      border:2px solid #0fd658;
+    }
+    .incorrect{
+      background:#ef444420;
+      color:#ef4444;
+      border:2px solid #ef4444;
+    }
     .vocab-stats{
       display:flex;
       justify-content:space-around;
@@ -131,11 +189,35 @@
       padding:15px;
       background:#0f172a;
       border-radius:10px;
+      border:2px solid #1e293b;
     }
     .stat-item{text-align:center}
-    .stat-label{color:#94a3b8;font-size:13px}
-    .stat-value{color:#e0c3da;font-size:24px;font-weight:700}
+    .stat-label{
+      color:#94a3b8;
+      font-size:13px;
+      margin-bottom:5px;
+    }
+    .stat-value{
+      color:#e0c3da;
+      font-size:24px;
+      font-weight:700;
+    }
     .hidden{display:none}
+    
+    .instruction{
+      color:#94a3b8;
+      font-size:13px;
+      text-align:center;
+      margin-top:10px;
+      font-style:italic;
+    }
+    
+    @media (max-width: 600px) {
+      .vocab-box{padding:20px}
+      .vocab-word{font-size:28px}
+      .time{font-size:40px}
+      .stopwatch-time{font-size:24px}
+    }
   </style>
 </head>
 <body>
@@ -152,8 +234,6 @@
     </div>
   </div>
 
-  <!-- Thời khóa biểu -->
-
   <!-- Vocabulary Test -->
   <div class="vocab-box">
     <h3>📚 Kiểm tra từ vựng Tiếng Anh</h3>
@@ -163,13 +243,14 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
         <div class="vocab-input-group">
           <label>Từ Tiếng Anh (mỗi từ một dòng):</label>
-          <textarea id="vocabEnglish" placeholder="Ví dụ:&#10;apple&#10;book&#10;computer&#10;student"></textarea>
+          <textarea id="vocabEnglish" placeholder="Ví dụ:&#10;apple&#10;book&#10;computer&#10;student&#10;teacher"></textarea>
         </div>
         <div class="vocab-input-group">
           <label>Nghĩa Tiếng Việt (mỗi nghĩa một dòng):</label>
-          <textarea id="vocabVietnamese" placeholder="Ví dụ:&#10;quả táo&#10;cuốn sách&#10;máy tính&#10;học sinh"></textarea>
+          <textarea id="vocabVietnamese" placeholder="Ví dụ:&#10;quả táo&#10;cuốn sách&#10;máy tính&#10;học sinh&#10;giáo viên"></textarea>
         </div>
       </div>
+      <div class="instruction">💡 Nhập số lượng từ tiếng Anh và nghĩa tương ứng phải bằng nhau</div>
       <button class="vocab-btn btn-start" onclick="startTest()">Bắt đầu kiểm tra</button>
     </div>
 
@@ -177,13 +258,20 @@
     <div id="testPhase" class="hidden">
       <div class="vocab-display">
         <div class="vocab-word" id="currentWord">—</div>
-        <div style="color:#94a3b8;font-size:14px">Nghĩa Tiếng Việt:</div>
+        <button class="pronunciation-btn" onclick="pronounceWord()" title="Phát âm từ này">
+          🔊 Nghe phát âm
+        </button>
+        <div style="color:#94a3b8;font-size:14px;margin-top:15px">Nhập nghĩa Tiếng Việt:</div>
       </div>
+      
       <div class="vocab-input-group">
         <input type="text" id="answerInput" placeholder="Nhập nghĩa tiếng Việt..." 
-               onkeypress="if(event.key==='Enter')checkAnswer()">
+               onkeypress="if(event.key==='Enter')checkAnswer()"
+               autocomplete="off">
       </div>
+      
       <div id="resultMsg" class="vocab-result hidden"></div>
+      
       <button class="vocab-btn btn-check" id="checkBtn" onclick="checkAnswer()">Kiểm tra</button>
       <button class="vocab-btn btn-next hidden" id="nextBtn" onclick="nextWord()">Từ tiếp theo</button>
       <button class="vocab-btn btn-reset" onclick="resetTest()">Kết thúc & Làm lại</button>
@@ -208,110 +296,211 @@
   <script>
     // ===== Đồng hồ =====
     function titleCaseVietnamese(s){
-      return s.split(/\s+/).map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+      return s.split(/\s+/).map(w => w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
     }
+    
     function updateClock(){
       const now = new Date();
-      const opts={timeZone:'Asia/Ho_Chi_Minh',weekday:'long',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
-      const parts=new Intl.DateTimeFormat('vi-VN',opts).formatToParts(now);
-      const map={};for(const p of parts) map[p.type]=p.value;
-      document.getElementById('weekday').textContent=titleCaseVietnamese(map.weekday);
-      document.getElementById('date').textContent=`Ngày ${map.day} tháng ${map.month} năm ${map.year}`;
-      document.getElementById('time').textContent=`${map.hour}:${map.minute}:${map.second}`;
+      const opts = {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        weekday: 'long',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      };
+      const parts = new Intl.DateTimeFormat('vi-VN', opts).formatToParts(now);
+      const map = {};
+      for(const p of parts) map[p.type] = p.value;
+      
+      document.getElementById('weekday').textContent = titleCaseVietnamese(map.weekday);
+      document.getElementById('date').textContent = `Ngày ${map.day} tháng ${map.month} năm ${map.year}`;
+      document.getElementById('time').textContent = `${map.hour}:${map.minute}:${map.second}`;
     }
-    setInterval(updateClock,1000);updateClock();
+    
+    setInterval(updateClock, 1000);
+    updateClock();
 
     // ===== Stopwatch =====
-    let stopwatchInterval;let elapsed=0;let running=false;
+    let stopwatchInterval;
+    let elapsed = 0;
+    let running = false;
+    
     function formatTime(ms){
-      const totalSec=Math.floor(ms/1000);
-      const h=String(Math.floor(totalSec/3600)).padStart(2,'0');
-      const m=String(Math.floor((totalSec%3600)/60)).padStart(2,'0');
-      const s=String(totalSec%60).padStart(2,'0');
+      const totalSec = Math.floor(ms / 1000);
+      const h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+      const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+      const s = String(totalSec % 60).padStart(2, '0');
       return `${h}:${m}:${s}`;
     }
+    
     function startStopwatch(){
-      if(running) return;running=true;
-      const start=Date.now()-elapsed;
-      stopwatchInterval=setInterval(()=>{
-        elapsed=Date.now()-start;
-        document.getElementById('stopwatch').textContent=formatTime(elapsed);
-      },1000);
+      if(running) return;
+      running = true;
+      const start = Date.now() - elapsed;
+      stopwatchInterval = setInterval(() => {
+        elapsed = Date.now() - start;
+        document.getElementById('stopwatch').textContent = formatTime(elapsed);
+      }, 1000);
     }
-    function stopStopwatch(){running=false;clearInterval(stopwatchInterval);}
-    function resetStopwatch(){elapsed=0;document.getElementById('stopwatch').textContent='00:00:00';if(running){clearInterval(stopwatchInterval);running=false;}}
+    
+    function stopStopwatch(){
+      running = false;
+      clearInterval(stopwatchInterval);
+    }
+    
+    function resetStopwatch(){
+      elapsed = 0;
+      document.getElementById('stopwatch').textContent = '00:00:00';
+      if(running){
+        clearInterval(stopwatchInterval);
+        running = false;
+      }
+    }
 
     // ===== Vocabulary Test =====
-    let vocabList=[];let currentIndex=0;let userAnswers=[];
-    let stats={done:0,correct:0,wrong:0};
+    let vocabList = [];
+    let currentIndex = 0;
+    let userAnswers = [];
+    let stats = {done: 0, correct: 0, wrong: 0};
 
     function startTest(){
-      const englishInput=document.getElementById('vocabEnglish').value.trim();
-      const vietnameseInput=document.getElementById('vocabVietnamese').value.trim();
+      const englishInput = document.getElementById('vocabEnglish').value.trim();
+      const vietnameseInput = document.getElementById('vocabVietnamese').value.trim();
       
       if(!englishInput || !vietnameseInput){
         alert('Vui lòng nhập đầy đủ từ tiếng Anh và nghĩa tiếng Việt!');
         return;
       }
       
-      const englishWords=englishInput.split('\n').map(w=>w.trim()).filter(w=>w.length>0);
-      const vietnameseMeanings=vietnameseInput.split('\n').map(w=>w.trim()).filter(w=>w.length>0);
+      const englishWords = englishInput.split('\n').map(w => w.trim()).filter(w => w.length > 0);
+      const vietnameseMeanings = vietnameseInput.split('\n').map(w => w.trim()).filter(w => w.length > 0);
       
-      if(englishWords.length===0 || vietnameseMeanings.length===0){
+      if(englishWords.length === 0 || vietnameseMeanings.length === 0){
         alert('Danh sách từ vựng trống!');
         return;
       }
       
       if(englishWords.length !== vietnameseMeanings.length){
-        alert('Số lượng từ tiếng Anh và nghĩa tiếng Việt không khớp!');
+        alert(`Số lượng không khớp!\nTiếng Anh: ${englishWords.length} từ\nTiếng Việt: ${vietnameseMeanings.length} nghĩa`);
         return;
       }
       
       // Create vocab pairs
-      vocabList=englishWords.map((eng,i)=>({english:eng,vietnamese:vietnameseMeanings[i]}));
+      vocabList = englishWords.map((eng, i) => ({
+        english: eng,
+        vietnamese: vietnameseMeanings[i]
+      }));
       
       // Shuffle vocabulary
-      vocabList=vocabList.sort(()=>Math.random()-0.5);
-      currentIndex=0;
-      userAnswers=new Array(vocabList.length).fill(null);
-      stats={done:0,correct:0,wrong:0};
+      vocabList = vocabList.sort(() => Math.random() - 0.5);
+      currentIndex = 0;
+      userAnswers = new Array(vocabList.length).fill(null);
+      stats = {done: 0, correct: 0, wrong: 0};
       
       document.getElementById('setupPhase').classList.add('hidden');
       document.getElementById('testPhase').classList.remove('hidden');
+      
+      updateStats();
       showWord();
     }
 
     function showWord(){
-      if(currentIndex>=vocabList.length){
-        alert(`Hoàn thành! Kết quả: ${stats.correct}/${vocabList.length} đúng`);
+      if(currentIndex >= vocabList.length){
+        const score = stats.correct;
+        const total = vocabList.length;
+        const percentage = Math.round((score / total) * 100);
+        alert(`🎉 Hoàn thành tất cả ${total} từ!\n\nĐiểm số: ${score}/${total} (${percentage}%)\n✅ Đúng: ${stats.correct}\n❌ Sai: ${stats.wrong}`);
         return;
       }
-      document.getElementById('currentWord').textContent=vocabList[currentIndex].english;
-      document.getElementById('answerInput').value='';
+      
+      document.getElementById('currentWord').textContent = vocabList[currentIndex].english;
+      document.getElementById('answerInput').value = '';
       document.getElementById('answerInput').focus();
       document.getElementById('resultMsg').classList.add('hidden');
       document.getElementById('checkBtn').classList.remove('hidden');
       document.getElementById('nextBtn').classList.add('hidden');
+      
+      // Auto-pronounce the word after a short delay
+      setTimeout(pronounceWord, 400);
     }
 
     function checkAnswer(){
-      const answer=document.getElementById('answerInput').value.trim();
-      if(!answer){alert('Vui lòng nhập đáp án!');return;}
+      const answer = document.getElementById('answerInput').value.trim();
+      if(!answer){
+        alert('Vui lòng nhập đáp án!');
+        return;
+      }
       
-      userAnswers[currentIndex]=answer;
-      const correctAnswer=vocabList[currentIndex].vietnamese;
+      userAnswers[currentIndex] = answer;
+      const correctAnswer = vocabList[currentIndex].vietnamese;
       
-      // Check if answer is correct (case insensitive)
-      const isCorrect=answer.toLowerCase()===correctAnswer.toLowerCase();
+      // Advanced normalization and fuzzy matching
+      const normalize = str => str.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/[^\w\s]/g, '') // Remove punctuation
+        .replace(/\s+/g, ' ')    // Normalize spaces
+        .trim();
       
-      const resultDiv=document.getElementById('resultMsg');
+      const normalizedAnswer = normalize(answer);
+      const normalizedCorrect = normalize(correctAnswer);
+      
+      // Check exact match
+      let isCorrect = normalizedAnswer === normalizedCorrect;
+      let matchType = 'exact';
+      
+      // Check if answer contains all words from correct answer
+      if(!isCorrect){
+        const answerWords = normalizedAnswer.split(' ');
+        const correctWords = normalizedCorrect.split(' ');
+        
+        // If lengths match and all words are present (different order)
+        if(answerWords.length === correctWords.length){
+          const allWordsPresent = correctWords.every(w => answerWords.includes(w));
+          if(allWordsPresent){
+            isCorrect = true;
+            matchType = 'word-order';
+          }
+        }
+      }
+      
+      // Check partial match (if correct answer has multiple meanings separated by /, or ,)
+      if(!isCorrect && (correctAnswer.includes('/') || correctAnswer.includes(','))){
+        const alternatives = correctAnswer.split(/[\/,]/).map(alt => normalize(alt.trim()));
+        if(alternatives.some(alt => alt === normalizedAnswer)){
+          isCorrect = true;
+          matchType = 'alternative';
+        }
+      }
+      
+      // Levenshtein distance for typo tolerance (max 2 character difference)
+      if(!isCorrect && normalizedAnswer.length >= 3){
+        const distance = levenshteinDistance(normalizedAnswer, normalizedCorrect);
+        const threshold = Math.max(2, Math.floor(normalizedCorrect.length * 0.15));
+        if(distance <= threshold){
+          isCorrect = true;
+          matchType = 'typo';
+        }
+      }
+      
+      const resultDiv = document.getElementById('resultMsg');
       if(isCorrect){
-        resultDiv.textContent=`✅ Chính xác! "${answer}"`;
-        resultDiv.className='vocab-result correct';
+        let message = '✅ <strong>Chính xác!</strong>';
+        if(matchType === 'typo') message += ' (Có lỗi chính tả nhỏ)';
+        if(matchType === 'word-order') message += ' (Đúng nghĩa)';
+        if(matchType === 'alternative') message += ' (Nghĩa thay thế đúng)';
+        message += `<br>"${answer}"`;
+        resultDiv.innerHTML = message;
+        resultDiv.className = 'vocab-result correct';
         stats.correct++;
       }else{
-        resultDiv.textContent=`❌ Sai rồi! Đáp án đúng: "${correctAnswer}"`;
-        resultDiv.className='vocab-result incorrect';
+        resultDiv.innerHTML = `❌ <strong>Sai rồi!</strong><br>Đáp án của bạn: "${answer}"<br>Đáp án đúng: "${correctAnswer}"`;
+        resultDiv.className = 'vocab-result incorrect';
         stats.wrong++;
       }
       resultDiv.classList.remove('hidden');
@@ -321,12 +510,41 @@
       
       document.getElementById('checkBtn').classList.add('hidden');
       document.getElementById('nextBtn').classList.remove('hidden');
+      document.getElementById('nextBtn').focus();
+    }
+    
+    // Levenshtein distance algorithm for fuzzy matching
+    function levenshteinDistance(str1, str2){
+      const m = str1.length;
+      const n = str2.length;
+      const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+      
+      for(let i = 0; i <= m; i++) dp[i][0] = i;
+      for(let j = 0; j <= n; j++) dp[0][j] = j;
+      
+      for(let i = 1; i <= m; i++){
+        for(let j = 1; j <= n; j++){
+          if(str1[i-1] === str2[j-1]){
+            dp[i][j] = dp[i-1][j-1];
+          }else{
+            dp[i][j] = Math.min(
+              dp[i-1][j] + 1,    // deletion
+              dp[i][j-1] + 1,    // insertion
+              dp[i-1][j-1] + 1   // substitution
+            );
+          }
+        }
+      }
+      return dp[m][n];
     }
 
     function nextWord(){
       currentIndex++;
-      if(currentIndex>=vocabList.length){
-        alert(`🎉 Hoàn thành tất cả ${vocabList.length} từ!\n\nĐã làm: ${stats.done}\nĐúng: ${stats.correct}\nSai: ${stats.wrong}`);
+      if(currentIndex >= vocabList.length){
+        const score = stats.correct;
+        const total = vocabList.length;
+        const percentage = Math.round((score / total) * 100);
+        alert(`🎉 Hoàn thành tất cả ${total} từ!\n\nĐiểm số: ${score}/${total} (${percentage}%)\n✅ Đúng: ${stats.correct}\n❌ Sai: ${stats.wrong}`);
         return;
       }
       showWord();
@@ -335,17 +553,39 @@
     function resetTest(){
       document.getElementById('setupPhase').classList.remove('hidden');
       document.getElementById('testPhase').classList.add('hidden');
-      document.getElementById('vocabEnglish').value='';
-      document.getElementById('vocabVietnamese').value='';
-      vocabList=[];currentIndex=0;userAnswers=[];
-      stats={done:0,correct:0,wrong:0};
+      vocabList = [];
+      currentIndex = 0;
+      userAnswers = [];
+      stats = {done: 0, correct: 0, wrong: 0};
       updateStats();
     }
 
     function updateStats(){
-      document.getElementById('statDone').textContent=stats.done;
-      document.getElementById('statCorrect').textContent=stats.correct;
-      document.getElementById('statWrong').textContent=stats.wrong;
+      document.getElementById('statDone').textContent = stats.done;
+      document.getElementById('statCorrect').textContent = stats.correct;
+      document.getElementById('statWrong').textContent = stats.wrong;
+    }
+
+    // ===== Text to Speech =====
+    function pronounceWord(){
+      const word = document.getElementById('currentWord').textContent;
+      if(!word || word === '—') return;
+      
+      // Check if browser supports speech synthesis
+      if('speechSynthesis' in window){
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US'; // English pronunciation
+        utterance.rate = 0.85; // Slightly slower for learning
+        utterance.pitch = 1;
+        utterance.volume = 1;
+        
+        window.speechSynthesis.speak(utterance);
+      }else{
+        alert('Trình duyệt của bạn không hỗ trợ phát âm tự động!\n\nVui lòng sử dụng Chrome, Edge, hoặc Safari.');
+      }
     }
   </script>
 </body>
