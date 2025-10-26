@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Thời khóa biểu & Đồng hồ</title>
+  <title>Thời khóa biểu & Đồng hồ & Từ vựng</title>
   <style>
-    
     *{
       font-family:Arial, Helvetica, sans-serif;
     }
@@ -19,6 +18,7 @@
       align-items:center;
       padding:20px;
     }
+    
     /* ===== Đồng hồ ===== */
     .clock-box{
       background:linear-gradient(145deg,#1e293b,#0f172a);
@@ -32,6 +32,7 @@
     .clock-box h2{margin:0;color:#d0bae9;font-size:22px;letter-spacing:1px}
     .date{margin-top:6px;color:#94a3b8;font-size:15px}
     .time{margin-top:15px;font-size:50px;font-weight:800;color:#e0c3da;letter-spacing:2px}
+    
     /* ===== Stopwatch ===== */
     .stopwatch{margin-top:20px}
     .stopwatch-time{font-size:28px;font-weight:700;margin-bottom:12px}
@@ -48,30 +49,93 @@
     .start{background:#0fd658;color:#fff}
     .stop{background:#ef4444;color:#fff}
     .reset{background:#3b82f6;color:#fff}
+    
     /* ===== Thời khóa biểu ===== */
-.timetable {
-  display: flex;
-  justify-content: center; /* căn giữa ngang */
-  align-items: center;     /* căn giữa dọc nếu cần */
-  margin-top: 20px;
-}
-
-.timetable img {
-  width: 85%;
-  max-width: 1000px;  /* để giữ đúng khung, không vượt màn hình */
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-}
-    .overlay-text{
-      position:absolute;
-      top:15%;
-      left:50%;
-      transform:translateX(-50%);
-      width:85%;
-      text-align:center;
-      color:#fff;
-      font-weight:600;
+    
+    /* ===== Vocabulary Test ===== */
+    .vocab-box{
+      background:linear-gradient(145deg,#1e293b,#0f172a);
+      padding:30px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.5);
+      margin-top:25px;
+      max-width:600px;
+      width:90%;
     }
+    .vocab-box h3{margin:0 0 20px 0;color:#d0bae9;font-size:24px;text-align:center}
+    .vocab-input-group{margin-bottom:20px}
+    .vocab-input-group label{display:block;margin-bottom:8px;color:#94a3b8;font-size:14px}
+    .vocab-input-group textarea{
+      width:100%;
+      padding:12px;
+      border:2px solid #334155;
+      border-radius:10px;
+      background:#0f172a;
+      color:#f1f5f9;
+      font-size:15px;
+      resize:vertical;
+      min-height:120px;
+      box-sizing:border-box;
+    }
+    .vocab-input-group input{
+      width:100%;
+      padding:12px;
+      border:2px solid #334155;
+      border-radius:10px;
+      background:#0f172a;
+      color:#f1f5f9;
+      font-size:16px;
+      box-sizing:border-box;
+    }
+    .vocab-input-group input:focus,.vocab-input-group textarea:focus{
+      outline:none;
+      border-color:#0084ff;
+    }
+    .vocab-btn{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:16px;
+      transition:transform .2s,opacity .2s;
+      margin-top:10px;
+    }
+    .vocab-btn:hover{transform:scale(1.02);opacity:0.9}
+    .btn-start{background:#0fd658;color:#fff}
+    .btn-check{background:#3b82f6;color:#fff}
+    .btn-next{background:#f59e0b;color:#fff}
+    .btn-reset{background:#ef4444;color:#fff}
+    .vocab-display{
+      background:#0f172a;
+      padding:20px;
+      border-radius:10px;
+      margin-bottom:15px;
+      text-align:center;
+    }
+    .vocab-word{font-size:32px;font-weight:700;color:#0fd658;margin-bottom:10px}
+    .vocab-result{
+      margin-top:15px;
+      padding:15px;
+      border-radius:10px;
+      font-weight:600;
+      text-align:center;
+    }
+    .correct{background:#0fd65820;color:#0fd658;border:2px solid #0fd658}
+    .incorrect{background:#ef444420;color:#ef4444;border:2px solid #ef4444}
+    .vocab-stats{
+      display:flex;
+      justify-content:space-around;
+      margin-top:20px;
+      padding:15px;
+      background:#0f172a;
+      border-radius:10px;
+    }
+    .stat-item{text-align:center}
+    .stat-label{color:#94a3b8;font-size:13px}
+    .stat-value{color:#e0c3da;font-size:24px;font-weight:700}
+    .hidden{display:none}
   </style>
 </head>
 <body>
@@ -89,10 +153,56 @@
   </div>
 
   <!-- Thời khóa biểu -->
-  <div class="timetable">
-    <img src="Trống Bảng phấn Lịch biểu Giáo Án.png" alt="Thời khóa biểu">
-    <!-- Ví dụ chèn text overlay lên bảng -->
-    <!-- <div class="overlay-text">Thứ 2: Linh kiện ĐT</div> -->
+
+  <!-- Vocabulary Test -->
+  <div class="vocab-box">
+    <h3>📚 Kiểm tra từ vựng Tiếng Anh</h3>
+    
+    <!-- Setup Phase -->
+    <div id="setupPhase">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+        <div class="vocab-input-group">
+          <label>Từ Tiếng Anh (mỗi từ một dòng):</label>
+          <textarea id="vocabEnglish" placeholder="Ví dụ:&#10;apple&#10;book&#10;computer&#10;student"></textarea>
+        </div>
+        <div class="vocab-input-group">
+          <label>Nghĩa Tiếng Việt (mỗi nghĩa một dòng):</label>
+          <textarea id="vocabVietnamese" placeholder="Ví dụ:&#10;quả táo&#10;cuốn sách&#10;máy tính&#10;học sinh"></textarea>
+        </div>
+      </div>
+      <button class="vocab-btn btn-start" onclick="startTest()">Bắt đầu kiểm tra</button>
+    </div>
+
+    <!-- Test Phase -->
+    <div id="testPhase" class="hidden">
+      <div class="vocab-display">
+        <div class="vocab-word" id="currentWord">—</div>
+        <div style="color:#94a3b8;font-size:14px">Nghĩa Tiếng Việt:</div>
+      </div>
+      <div class="vocab-input-group">
+        <input type="text" id="answerInput" placeholder="Nhập nghĩa tiếng Việt..." 
+               onkeypress="if(event.key==='Enter')checkAnswer()">
+      </div>
+      <div id="resultMsg" class="vocab-result hidden"></div>
+      <button class="vocab-btn btn-check" id="checkBtn" onclick="checkAnswer()">Kiểm tra</button>
+      <button class="vocab-btn btn-next hidden" id="nextBtn" onclick="nextWord()">Từ tiếp theo</button>
+      <button class="vocab-btn btn-reset" onclick="resetTest()">Kết thúc & Làm lại</button>
+      
+      <div class="vocab-stats">
+        <div class="stat-item">
+          <div class="stat-label">Đã làm</div>
+          <div class="stat-value" id="statDone">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Đúng</div>
+          <div class="stat-value" id="statCorrect" style="color:#0fd658">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Sai</div>
+          <div class="stat-value" id="statWrong" style="color:#ef4444">0</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -130,6 +240,113 @@
     }
     function stopStopwatch(){running=false;clearInterval(stopwatchInterval);}
     function resetStopwatch(){elapsed=0;document.getElementById('stopwatch').textContent='00:00:00';if(running){clearInterval(stopwatchInterval);running=false;}}
+
+    // ===== Vocabulary Test =====
+    let vocabList=[];let currentIndex=0;let userAnswers=[];
+    let stats={done:0,correct:0,wrong:0};
+
+    function startTest(){
+      const englishInput=document.getElementById('vocabEnglish').value.trim();
+      const vietnameseInput=document.getElementById('vocabVietnamese').value.trim();
+      
+      if(!englishInput || !vietnameseInput){
+        alert('Vui lòng nhập đầy đủ từ tiếng Anh và nghĩa tiếng Việt!');
+        return;
+      }
+      
+      const englishWords=englishInput.split('\n').map(w=>w.trim()).filter(w=>w.length>0);
+      const vietnameseMeanings=vietnameseInput.split('\n').map(w=>w.trim()).filter(w=>w.length>0);
+      
+      if(englishWords.length===0 || vietnameseMeanings.length===0){
+        alert('Danh sách từ vựng trống!');
+        return;
+      }
+      
+      if(englishWords.length !== vietnameseMeanings.length){
+        alert('Số lượng từ tiếng Anh và nghĩa tiếng Việt không khớp!');
+        return;
+      }
+      
+      // Create vocab pairs
+      vocabList=englishWords.map((eng,i)=>({english:eng,vietnamese:vietnameseMeanings[i]}));
+      
+      // Shuffle vocabulary
+      vocabList=vocabList.sort(()=>Math.random()-0.5);
+      currentIndex=0;
+      userAnswers=new Array(vocabList.length).fill(null);
+      stats={done:0,correct:0,wrong:0};
+      
+      document.getElementById('setupPhase').classList.add('hidden');
+      document.getElementById('testPhase').classList.remove('hidden');
+      showWord();
+    }
+
+    function showWord(){
+      if(currentIndex>=vocabList.length){
+        alert(`Hoàn thành! Kết quả: ${stats.correct}/${vocabList.length} đúng`);
+        return;
+      }
+      document.getElementById('currentWord').textContent=vocabList[currentIndex].english;
+      document.getElementById('answerInput').value='';
+      document.getElementById('answerInput').focus();
+      document.getElementById('resultMsg').classList.add('hidden');
+      document.getElementById('checkBtn').classList.remove('hidden');
+      document.getElementById('nextBtn').classList.add('hidden');
+    }
+
+    function checkAnswer(){
+      const answer=document.getElementById('answerInput').value.trim();
+      if(!answer){alert('Vui lòng nhập đáp án!');return;}
+      
+      userAnswers[currentIndex]=answer;
+      const correctAnswer=vocabList[currentIndex].vietnamese;
+      
+      // Check if answer is correct (case insensitive)
+      const isCorrect=answer.toLowerCase()===correctAnswer.toLowerCase();
+      
+      const resultDiv=document.getElementById('resultMsg');
+      if(isCorrect){
+        resultDiv.textContent=`✅ Chính xác! "${answer}"`;
+        resultDiv.className='vocab-result correct';
+        stats.correct++;
+      }else{
+        resultDiv.textContent=`❌ Sai rồi! Đáp án đúng: "${correctAnswer}"`;
+        resultDiv.className='vocab-result incorrect';
+        stats.wrong++;
+      }
+      resultDiv.classList.remove('hidden');
+      
+      stats.done++;
+      updateStats();
+      
+      document.getElementById('checkBtn').classList.add('hidden');
+      document.getElementById('nextBtn').classList.remove('hidden');
+    }
+
+    function nextWord(){
+      currentIndex++;
+      if(currentIndex>=vocabList.length){
+        alert(`🎉 Hoàn thành tất cả ${vocabList.length} từ!\n\nĐã làm: ${stats.done}\nĐúng: ${stats.correct}\nSai: ${stats.wrong}`);
+        return;
+      }
+      showWord();
+    }
+
+    function resetTest(){
+      document.getElementById('setupPhase').classList.remove('hidden');
+      document.getElementById('testPhase').classList.add('hidden');
+      document.getElementById('vocabEnglish').value='';
+      document.getElementById('vocabVietnamese').value='';
+      vocabList=[];currentIndex=0;userAnswers=[];
+      stats={done:0,correct:0,wrong:0};
+      updateStats();
+    }
+
+    function updateStats(){
+      document.getElementById('statDone').textContent=stats.done;
+      document.getElementById('statCorrect').textContent=stats.correct;
+      document.getElementById('statWrong').textContent=stats.wrong;
+    }
   </script>
 </body>
 </html>
